@@ -2,6 +2,8 @@
   <body>
     <h1>Amortization List</h1>
     <p>This is the list for the amortization items</p>
+
+    <!-- Table of Amortizations -->
     <div class="grid grid-cols-3 gap-4">
       <div v-for="amortization in paginatedData" class="flex flex-wrap">
         <div class="border border-gray-300 p-4 rounded-lg">
@@ -34,30 +36,22 @@
     </div>
 
     <!-- Pagination -->
-    <div class="m-10 flex justify-center items-center">
-      <button
-        @click="nextPage()"
-        :disabled="currentPage === totalPages - 1"
-        class="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        <img src="../assets/icons/circle_chev_right.svg" alt="" />
-      </button>
-      <span class="mx-8"> {{ currentPage + 1 }} / {{ totalPages }} </span>
-      <button
-        @click="previousPage()"
-        :disabled="currentPage === 0"
-        class="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        <img src="../assets/icons/circle_chev_left.svg" alt="" />
-      </button>
-    </div>
+    <Pagination :numOfPages="totalPages" @pageChanged="handlePageChange"/>
   </body>
 </template>
 
 <script setup lang="ts">
 // Add your script setup here
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps } from 'vue'
 import amortizations from '../assets/data/payment_data.js'
+
+import Pagination from './Pagination.vue'
+
+// Props. Receive page number
+const props = defineProps({
+  currentPage: Number,
+})
+
 
 // Pagination variables. 3*3
 const currentPage = ref(0)
@@ -68,21 +62,14 @@ const totalPages = computed(() => Math.ceil(amortizations.length / pageSize))
 const paginatedData = computed(() => {
   const start = currentPage.value * pageSize
   const end = start + pageSize
-  console.log(start, end, amortizations.slice(start, end))
   return amortizations.slice(start, end)
 })
 
-// Pagination controls
-const nextPage = () => {
-  if (currentPage.value < totalPages.value - 1) {
-    currentPage.value++
-  }
-}
-const previousPage = () => {
-  if (currentPage.value > 0) {
-    currentPage.value--
-  }
-}
+const handlePageChange = (newPage: number) => {
+  currentPage.value = newPage;
+};
+
+
 </script>
 
 <style scoped>
