@@ -1,7 +1,6 @@
 <template>
-  <Sorting :data="amortizations"/>
+  <Sorting :data="amortizations"  @sortedAmortizations="handleSortedAmortizations" />
   <body class="flex justify-center">
-
     <!-- Table of Amortizations -->
     <div class="grid grid-cols-3 gap-4">
       <div v-for="amortization in paginatedData" class="flex flex-wrap">
@@ -28,7 +27,13 @@
           <!-- State -->
           <div class="flex items-center">
             <b class="mr-2">State:</b>
-            <span :class="{ 'text-yellow-500': amortization.state === 'pending', 'text-green-500': amortization.state === 'paid'}">{{ amortization.state }}</span>
+            <span
+              :class="{
+                'text-yellow-500': amortization.state === 'pending',
+                'text-green-500': amortization.state === 'paid'
+              }"
+              >{{ amortization.state }}</span
+            >
           </div>
         </div>
       </div>
@@ -36,39 +41,41 @@
   </body>
 
   <!-- Pagination -->
-  <Pagination :numOfPages="totalPages" @pageChanged="handlePageChange"/>
+  <Pagination :numOfPages="totalPages" @pageChanged="handlePageChange" />
 </template>
 
 <script setup lang="ts">
 // Add your script setup here
-import { ref, computed, defineProps } from 'vue'
-import amortizations from '../assets/data/payment_data.js'
+import { ref, computed, watchEffect } from 'vue'
+import importedAmortizations from '../assets/data/payment_data.js'
 
 import Pagination from './Pagination.vue'
 import Sorting from './Sorting.vue'
-
-// Props. Receive page number
-const props = defineProps({
-  currentPage: Number,
-})
-
+import type { AmortizationI } from '@/types/amortization.interface'
 
 // Pagination variables. 3*3
 const currentPage = ref(0)
 const pageSize = 9
 
+let amortizations = ref(importedAmortizations)
+
 // Pagination computed properties, total number of pages and paginated data
-const totalPages = computed(() => Math.ceil(amortizations.length / pageSize))
+const totalPages = computed(() => Math.ceil(amortizations.value.length / pageSize))
 const paginatedData = computed(() => {
   const start = currentPage.value * pageSize
   const end = start + pageSize
-  return amortizations.slice(start, end)
+  return amortizations.value.slice(start, end)
 })
 
+// Sets the current page after being emitted by Pagination component
 const handlePageChange = (newPage: number) => {
-  currentPage.value = newPage;
-};
+  currentPage.value = newPage
+}
 
+// Sets the sorted amortizations after being emitted by Sorting component
+const handleSortedAmortizations = (sortedAmortizations: AmortizationI[]) => {
+  amortizations.value = sortedAmortizations
+}
 
 </script>
 
