@@ -2,6 +2,8 @@
 import { RouterLink, RouterView } from 'vue-router'
 import AmortizationList from './components/AmortizationList.vue'
 
+console.log('App.vue script setup')
+
 </script>
 
 <template>  
