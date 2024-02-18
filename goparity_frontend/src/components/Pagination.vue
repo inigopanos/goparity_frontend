@@ -4,7 +4,7 @@
     <button
       @click="nextPage()"
       :disabled="currentPage === totalPages - 1"
-      class="px-4 py-2 bg-blue-500 text-white rounded"
+      class="px-4 py-2"
     >
       <img src="../assets/icons/circle_chev_right.svg" alt="" />
     </button>
@@ -12,7 +12,7 @@
     <button
       @click="previousPage()"
       :disabled="currentPage === 0"
-      class="px-4 py-2 bg-blue-500 text-white rounded"
+      class="px-4 py-2"
     >
       <img src="../assets/icons/circle_chev_left.svg" alt="" />
     </button>

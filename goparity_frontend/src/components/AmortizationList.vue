@@ -1,7 +1,6 @@
 <template>
-  <body>
-    <h1>Amortization List</h1>
-    <p>This is the list for the amortization items</p>
+  <Sorting :data="amortizations"/>
+  <body class="flex justify-center">
 
     <!-- Table of Amortizations -->
     <div class="grid grid-cols-3 gap-4">
@@ -29,15 +28,15 @@
           <!-- State -->
           <div class="flex items-center">
             <b class="mr-2">State:</b>
-            <span class="text-green-500">{{ amortization.state }}</span>
+            <span :class="{ 'text-yellow-500': amortization.state === 'pending', 'text-green-500': amortization.state === 'paid'}">{{ amortization.state }}</span>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Pagination -->
-    <Pagination :numOfPages="totalPages" @pageChanged="handlePageChange"/>
   </body>
+
+  <!-- Pagination -->
+  <Pagination :numOfPages="totalPages" @pageChanged="handlePageChange"/>
 </template>
 
 <script setup lang="ts">
@@ -46,6 +45,7 @@ import { ref, computed, defineProps } from 'vue'
 import amortizations from '../assets/data/payment_data.js'
 
 import Pagination from './Pagination.vue'
+import Sorting from './Sorting.vue'
 
 // Props. Receive page number
 const props = defineProps({
