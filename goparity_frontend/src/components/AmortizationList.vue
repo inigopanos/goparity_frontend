@@ -34,10 +34,22 @@
     </div>
 
     <!-- Pagination -->
-    <div>
-      <button v-on:click="nextPage()">></button>
-      <span>{{ currentPage + 1 }} / {{ totalPages }}</span>
-      <button v-on:click="previousPage()">&lt;</button>
+    <div class="m-10 flex justify-center items-center">
+      <button
+        @click="nextPage()"
+        :disabled="currentPage === totalPages - 1"
+        class="px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        <img src="../assets/icons/circle_chev_right.svg" alt="" />
+      </button>
+      <span class="mx-8"> {{ currentPage + 1 }} / {{ totalPages }} </span>
+      <button
+        @click="previousPage()"
+        :disabled="currentPage === 0"
+        class="px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        <img src="../assets/icons/circle_chev_left.svg" alt="" />
+      </button>
     </div>
   </body>
 </template>
