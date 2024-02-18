@@ -2,20 +2,75 @@
   <body>
     <h1>Amortization List</h1>
     <p>This is the list for the amortization items</p>
-    <div v-for="amortization of amortizations" class="w-full max-w-[50%] shadow-[0_2px_3px_0_rgba(0,0,0,0.075)] p-4 rounded-[5px]">
-      <div class="flex mb-2"><b>Amount: </b> {{ amortization.amount }}</div>
-      <div class="flex mb-2 text-[#888]"><b>Project id: </b> {{ amortization.project_id }}</div>
-      <div class="w-full max-w-[5rem] h-[3px] mt-4 mb-8 mx-0 bg-[#11b8ab]"></div>
-      <div class="flex mb-2">Due: {{ amortization.schedule_date }}</div>
-      <div class="flex mb-2"><b>Status: </b> {{ amortization.state }}</div>
+    <div class="grid grid-cols-3 gap-4">
+      <div v-for="amortization in paginatedData" class="flex flex-wrap">
+        <div class="border border-gray-300 p-4 rounded-lg">
+          <!-- Amount -->
+          <div class="flex items-center mb-2">
+            <b class="mr-2">Amount:</b>
+            <span class="text-gray-700">{{ amortization.amount }}</span>
+          </div>
+          <!-- Project ID -->
+          <div class="flex items-center mb-2">
+            <b class="mr-2">Project ID:</b>
+            <span class="text-gray-700">{{ amortization.project_id }}</span>
+          </div>
+
+          <div class="w-full max-w-[5rem] h-[3px] mt-4 mb-8 mx-0 bg-[#11b8ab]"></div>
+
+          <!-- Schedule Date -->
+          <div class="flex items-center mb-2">
+            <b class="mr-2">Due Date:</b>
+            <span class="text-gray-700">{{ amortization.schedule_date }}</span>
+          </div>
+
+          <!-- State -->
+          <div class="flex items-center">
+            <b class="mr-2">State:</b>
+            <span class="text-green-500">{{ amortization.state }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div>
+      <button v-on:click="nextPage()">></button>
+      <span>{{ currentPage + 1 }} / {{ totalPages }}</span>
+      <button v-on:click="previousPage()">&lt;</button>
     </div>
   </body>
 </template>
 
 <script setup lang="ts">
 // Add your script setup here
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import amortizations from '../assets/data/payment_data.js'
+
+// Pagination variables. 3*3
+const currentPage = ref(0)
+const pageSize = 9
+
+// Pagination computed properties, total number of pages and paginated data
+const totalPages = computed(() => Math.ceil(amortizations.length / pageSize))
+const paginatedData = computed(() => {
+  const start = currentPage.value * pageSize
+  const end = start + pageSize
+  console.log(start, end, amortizations.slice(start, end))
+  return amortizations.slice(start, end)
+})
+
+// Pagination controls
+const nextPage = () => {
+  if (currentPage.value < totalPages.value - 1) {
+    currentPage.value++
+  }
+}
+const previousPage = () => {
+  if (currentPage.value > 0) {
+    currentPage.value--
+  }
+}
 </script>
 
 <style scoped>
