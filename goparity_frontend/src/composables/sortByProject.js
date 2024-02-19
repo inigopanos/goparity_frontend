@@ -14,11 +14,11 @@ export default function sortAmortizationsByProjectID(amortizations) {
     return []
   }
 
+  // Change sorting order
+  sortOrderProjectID.value = sortOrderProjectID.value === 'asc' ? 'desc' : 'asc'
+
   const sortedAmortizations = [...amortizations]
   sortedAmortizations.sort(compareByProjectID)
-
-  // Change sorting order
-  sortOrderProjectID = sortOrderProjectID === 'asc' ? 'desc' : 'asc'
 
   return sortedAmortizations
 }
