@@ -9,12 +9,17 @@
       <button @click="sortAmortizationsByState()" class="font-bold py-2 px-4 rounded ml-4">
         Status
       </button>
+
+      <button @click="projectIdSorting()" class="font-bold py-2 px-4 rounded ml-4">
+        ProjectID
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue'
+import sortAmortizationsByProjectID from '../composables/sortByProject.js'
 
 // Define props and receive amortizations data from parent component (AmnortizationList.vue)
 const props = defineProps({
@@ -55,7 +60,7 @@ function sortAmortizationsByAmount() {
   return sortedAmortizations
 }
 
-// Compares the status property depending on sorting order
+// Compares the state property depending on sorting order
 function compareByState(a, b) {
   // If states are the same no need to compare
   if (a.state === b.state) {
@@ -86,6 +91,11 @@ function sortAmortizationsByState() {
   // Emit sorted amortizations to parent component (AmortizationList.vue)
   emits('sortedAmortizations', sortedAmortizations)
   return sortedAmortizations
+}
+
+function projectIdSorting(){
+  let sortedAmortizations = sortAmortizationsByProjectID(amortizations.value)
+  emits('sortedAmortizations', sortedAmortizations)
 }
 </script>
 
