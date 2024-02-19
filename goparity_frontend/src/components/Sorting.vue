@@ -9,6 +9,10 @@
       <button @click="projectIdSorting()" class="font-bold py-2 px-4 rounded ml-4">
         ProjectID
       </button>
+
+      <button @click="dateSorting()" class="font-bold py-2 px-4 rounded ml-4">
+        Scheduled Date
+      </button>
     </div>
   </div>
 </template>
@@ -18,6 +22,7 @@ import { defineProps, defineEmits, ref } from 'vue'
 import sortAmortizationsByProjectID from '../composables/sortByProject.js'
 import sortAmortizationsByState from '../composables/sortByState.js'
 import sortAmortizationsByAmount from '../composables/sortByAmount.js'
+import sortAmortizationsByDate from '../composables/sortByDate.js'
 
 // Define props and receive amortizations data from parent component (AmnortizationList.vue)
 const props = defineProps({
@@ -27,7 +32,7 @@ const props = defineProps({
   }
 })
 
-// Define props and emits, from and to AmortizationList.vue
+// Set props and define emits, from and to AmortizationList.vue
 const amortizations = ref(props.data)
 const emits = defineEmits(['sortedAmortizations'])
 
@@ -45,6 +50,12 @@ function stateSorting() {
 
 function projectIdSorting() {
   let sortedAmortizations = sortAmortizationsByProjectID(amortizations.value)
+  // Emit sorted amortizations to parent component (AmortizationList.vue)
+  emits('sortedAmortizations', sortedAmortizations)
+}
+
+function dateSorting(){
+  let sortedAmortizations = sortAmortizationsByDate(amortizations.value)
   // Emit sorted amortizations to parent component (AmortizationList.vue)
   emits('sortedAmortizations', sortedAmortizations)
 }

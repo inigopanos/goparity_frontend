@@ -10,6 +10,7 @@ function compareByAmount(a, b) {
 
 // Sort amortizations by amount
 export default function sortAmortizationsByAmount(amortizations) {
+  // If amortizations is not an array, create one
   if (!Array.isArray(amortizations)) {
     return []
   }
